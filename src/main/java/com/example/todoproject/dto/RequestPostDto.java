@@ -1,7 +1,8 @@
 package com.example.todoproject.dto;
 
-import lombok.NonNull;
+import lombok.Getter;
 
+@Getter
 public class RequestPostDto {
     private String contents;
     private String userName;
