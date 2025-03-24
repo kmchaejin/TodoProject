@@ -1,7 +1,8 @@
 package com.example.todoproject.repository;
 
 import com.example.todoproject.dto.RequestPostDto;
+import com.example.todoproject.dto.ResponseDto;
 
 public interface TodoRepository {
-    void addTodo(RequestPostDto dto);
+    ResponseDto addTodo(RequestPostDto dto);
 }

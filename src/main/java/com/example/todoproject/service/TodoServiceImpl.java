@@ -13,8 +13,6 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public ResponseDto addTodo(RequestPostDto dto) {
-        todoRepository.addTodo(dto);
-
-        return new ResponseDto();
+        return todoRepository.addTodo(dto);
     }
 }
