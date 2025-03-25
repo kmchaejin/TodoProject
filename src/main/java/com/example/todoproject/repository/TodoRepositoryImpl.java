@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -49,13 +50,13 @@ public class TodoRepositoryImpl implements TodoRepository {
 
     @Override
     public List<ResponseDto> findAllTodos(String updatedDate, String userName) {
-        // updatedDate 타입 String -> timestamp로 변환 필요
-        Timestamp timestampUpdatedDate = Timestamp.valueOf(updatedDate);
+        // updatedDate 타입 String -> Date로 변환
+        Date formatUpdatedDate = Date.valueOf(updatedDate);
 
         // 유저 네임과 투두 객체가 필요함
         // 방법1. 각각 sql문을 작성해서 따로 가져오기
         // 방법2. 유저 네임과 투두 객체의 데이터를 모두 가지는 전용 dto 생성 -> userid가 제외된 것만 빼면 똑같아서 굳이 안만들어도 될 듯
-        List<ResponseDto> responseDtoList = jdbcTemplate.query("select todo.id, user_name, contents, created_date, updated_date from todo left join user on todo.user_id = user.id where updateDate = ? or user_name = ?", joinRowMapper(), timestampUpdatedDate, userName);
+        List<ResponseDto> responseDtoList = jdbcTemplate.query("select todo.id, user_name, contents, created_date, updated_date from todo left join user on todo.user_id = user.id where DATE_FORMAT(updated_date, '%Y-%m-%d') = ? or user_name = ?", joinRowMapper(), formatUpdatedDate, userName);
 
         return responseDtoList;
     }
