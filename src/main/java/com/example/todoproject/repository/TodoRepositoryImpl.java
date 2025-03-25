@@ -29,7 +29,7 @@ public class TodoRepositoryImpl implements TodoRepository {
     }
 
     @Override
-    public Todo addTodo(RequestPostDto dto) {
+    public TodoResponseDto addTodo(RequestPostDto dto) {
         Todo todo = new Todo(dto.getContents());
         User user = new User(dto.getUserName(), dto.getPassword());
 
@@ -56,38 +56,23 @@ public class TodoRepositoryImpl implements TodoRepository {
 
         // 투두 객체 가져오기
         // 조인mapper로 변경 필요
-        List<Todo> todoList = jdbcTemplate.query("select * from todo where id = ?", todoRowMapper(), todoId);
-        Todo foundTodo = todoList.stream().findFirst().orElseThrow(); // orElseThrow() : null이면 예외 발생
+        List<TodoResponseDto> todoList = jdbcTemplate.query("select * from todo left join user on todo.user_id = user.id where todo.id = ?", joinRowMapper(), todoId);
+        TodoResponseDto foundTodo = todoList.stream().findFirst().orElseThrow(); // orElseThrow() : null이면 예외 발생
 
         return foundTodo;
     }
 
     @Override
-    public List<TodoResponseDto> findAllTodos(Timestamp updatedDate, String userName) {
+    public List<TodoResponseDto> findAllTodos(String updatedDate, String userName) {
         // updatedDate 타입 String -> timestamp로 변환 필요
-        Timestamp timestampUpdatedDate = Timestamp.valueOf(updatedDate.toLocalDateTime());
+        Timestamp timestampUpdatedDate = Timestamp.valueOf(updatedDate);
 
         // 유저 네임과 투두 객체가 필요함
         // 방법1. 각각 sql문을 작성해서 따로 가져오기
         // 방법2. 유저 네임과 투두 객체의 데이터를 모두 가지는 전용 dto 생성 -> userid가 제외된 것만 빼면 똑같아서 굳이 안만들어도 될 듯
-        List<TodoResponseDto> todoResponseDtoList = jdbcTemplate.query("select id, user_name, contents, created_date, updated_date from todo left join user on todo.user_id = user.id where updateDate = ? or user_name = ?", joinRowMapper(), timestampUpdatedDate, userName);
+        List<TodoResponseDto> todoResponseDtoList = jdbcTemplate.query("select todo.id, user_name, contents, created_date, updated_date from todo left join user on todo.user_id = user.id where updateDate = ? or user_name = ?", joinRowMapper(), timestampUpdatedDate, userName);
 
         return todoResponseDtoList;
-    }
-
-    private RowMapper<Todo> todoRowMapper() {
-        return new RowMapper<Todo>() {
-            @Override
-            public Todo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Todo(
-                        rs.getLong("id"),
-                        rs.getLong("user_id"),
-                        rs.getString("contents"),
-                        rs.getTimestamp("created_date"),
-                        rs.getTimestamp("updated_date")
-                );
-            }
-        };
     }
 
     private RowMapper<TodoResponseDto> joinRowMapper() {

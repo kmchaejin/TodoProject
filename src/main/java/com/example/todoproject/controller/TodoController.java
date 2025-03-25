@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -23,7 +22,7 @@ public class TodoController {
     }
 
     @GetMapping
-    public List<TodoResponseDto> findAllTodos(@RequestParam Timestamp updatedDate, String userName){
+    public List<TodoResponseDto> findAllTodos(@RequestParam String updatedDate, String userName){
         return todoService.findAllTodos(updatedDate, userName); // 상태코드 필요한가?
     }
 }

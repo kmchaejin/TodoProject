@@ -14,7 +14,7 @@ public class TodoResponseDto {
     private Timestamp createdDate;
     private Timestamp updatedDate;
 
-    public TodoResponseDto(long todoId, String contents, String userName, Timestamp createdDate, Timestamp updatedDate) {
+    public TodoResponseDto(long todoId, String userName, String contents, Timestamp createdDate, Timestamp updatedDate) {
         this.todoId = todoId;
         this.contents = contents;
         this.userName = userName;
