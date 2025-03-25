@@ -84,6 +84,11 @@ public class TodoRepositoryImpl implements TodoRepository {
         return jdbcTemplate.update("update todo set contents = ? where id = ?", contents, todoId);
     }
 
+    @Override
+    public int deleteTodo(long todoId) {
+        return jdbcTemplate.update("delete from todo where id = ?", todoId);
+    }
+
 
     private RowMapper<TodoResponseDto> joinRowMapperV1() {
         return new RowMapper<TodoResponseDto>() {

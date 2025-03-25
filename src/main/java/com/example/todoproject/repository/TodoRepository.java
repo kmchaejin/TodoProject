@@ -15,4 +15,6 @@ public interface TodoRepository {
     long findUserId(long todoId);
 
     int updateTodoContents(long todoId, String contents);
+
+    int deleteTodo(long todoId);
 }
