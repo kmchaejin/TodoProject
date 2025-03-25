@@ -3,7 +3,7 @@ package com.example.todoproject.dto;
 import lombok.Getter;
 
 @Getter
-public class RequestPostDto {
+public class TodoRequestDto {
     private String contents;
     private String userName;
     //@NonNull

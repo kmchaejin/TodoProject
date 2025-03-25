@@ -1,12 +1,17 @@
 package com.example.todoproject.service;
 
-import com.example.todoproject.dto.RequestPostDto;
-import com.example.todoproject.dto.ResponseDto;
+import com.example.todoproject.dto.TodoRequestDto;
+import com.example.todoproject.dto.TodoResponseDto;
+import com.example.todoproject.dto.TodoWithoutIdResponseDto;
 
 import java.util.List;
 
 public interface TodoService {
-    ResponseDto addTodo(RequestPostDto dto);
+    TodoResponseDto addTodo(TodoRequestDto dto);
 
-    List<ResponseDto> findAllTodos(String updatedDate, String userName);
+    List<TodoResponseDto> findAllTodos(String updatedDate, String userName);
+
+    TodoWithoutIdResponseDto findById(long todoId);
+
+    TodoWithoutIdResponseDto updateTodo(long todoId, TodoRequestDto dto);
 }
