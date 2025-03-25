@@ -10,14 +10,14 @@ public class Todo {
     private long userId;
     private String contents;
     private Timestamp createdDate;
-    private Timestamp updatedDate;
+    private String updatedDate;
 
     // addTodo
     public Todo(String contents) {
         this.contents = contents;
     }
 
-    public Todo(long todoId, long userId, String contents, Timestamp createdDate, Timestamp updatedDate) {
+    public Todo(long todoId, long userId, String contents, Timestamp createdDate, String updatedDate) {
         this.todoId = todoId;
         this.userId = userId;
         this.contents = contents;
