@@ -1,12 +1,12 @@
 package com.example.todoproject.service;
 
 import com.example.todoproject.dto.RequestPostDto;
-import com.example.todoproject.dto.TodoResponseDto;
+import com.example.todoproject.dto.ResponseDto;
 
 import java.util.List;
 
 public interface TodoService {
-    TodoResponseDto addTodo(RequestPostDto dto);
+    ResponseDto addTodo(RequestPostDto dto);
 
-    List<TodoResponseDto> findAllTodos(String updatedDate, String userName);
+    List<ResponseDto> findAllTodos(String updatedDate, String userName);
 }

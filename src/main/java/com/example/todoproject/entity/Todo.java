@@ -11,17 +11,4 @@ public class Todo {
     private String contents;
     private Timestamp createdDate;
     private String updatedDate;
-
-    // addTodo
-    public Todo(String contents) {
-        this.contents = contents;
-    }
-
-    public Todo(long todoId, long userId, String contents, Timestamp createdDate, String updatedDate) {
-        this.todoId = todoId;
-        this.userId = userId;
-        this.contents = contents;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
-    }
 }

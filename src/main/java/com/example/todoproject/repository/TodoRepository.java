@@ -1,12 +1,11 @@
 package com.example.todoproject.repository;
 
-import com.example.todoproject.dto.RequestPostDto;
-import com.example.todoproject.dto.TodoResponseDto;
+import com.example.todoproject.dto.ResponseDto;
 
 import java.util.List;
 
 public interface TodoRepository {
-    TodoResponseDto addTodo(RequestPostDto dto);
+    ResponseDto addTodo(String contents, long userId);
 
-    List<TodoResponseDto> findAllTodos(String updatedDate, String userName);
+    List<ResponseDto> findAllTodos(String updatedDate, String userName);
 }
