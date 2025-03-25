@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Repository
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class TodoRepositoryImpl implements TodoRepository {
 
         // 생성된 todo 반환
         List<TodoResponseDto> todoList = jdbcTemplate.query("select todo.id, user_name, contents, created_date, updated_date from todo left join user on todo.user_id = user.id where todo.id = ?", joinRowMapperV1(), todoId);
-        TodoResponseDto addedTodo = todoList.stream().findFirst().orElseThrow(); // orElseThrow() : null이면 예외 발생
+        TodoResponseDto addedTodo = todoList.stream().findFirst().orElseThrow();
 
         return addedTodo;
     }
@@ -64,7 +65,6 @@ public class TodoRepositoryImpl implements TodoRepository {
             formatUpdatedDate = Date.valueOf(updatedDate);
         }
 
-
         // todo 테이블, user 테이블에 분리되어 있는 데이터를 하나의 객체에 저장하기 위해 DTO에 바로 저장
         List<TodoResponseDto> todoResponseDtoList = jdbcTemplate.query("select todo.id, contents, user_name, created_date, updated_date from todo left join user on todo.user_id = user.id " +
                 "where DATE_FORMAT(updated_date, '%Y-%m-%d') = COALESCE(?, DATE_FORMAT(updated_date, '%Y-%m-%d')) " +
@@ -76,7 +76,7 @@ public class TodoRepositoryImpl implements TodoRepository {
 
     // todo 단건 조회
     @Override
-    public TodoWithoutIdResponseDto findById(long todoId) {
+    public TodoWithoutIdResponseDto findById(long todoId) throws NoSuchElementException {
         List<TodoWithoutIdResponseDto> todoList = jdbcTemplate.query("select * from todo left join user on todo.user_id = user.id where todo.id = ?", joinRowMapperV2(), todoId);
         TodoWithoutIdResponseDto foundTodo = todoList.stream().findFirst().orElseThrow();
 

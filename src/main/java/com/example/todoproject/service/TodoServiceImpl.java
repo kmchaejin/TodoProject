@@ -72,7 +72,7 @@ public class TodoServiceImpl implements TodoService {
             // findById로 수정된 Todo 반환
             return todoRepository.findById(todoId);
         } else {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. 할 일을 수정하실 수 없습니다.");
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
     }
 
@@ -91,10 +91,10 @@ public class TodoServiceImpl implements TodoService {
 
             // delete된 레코드 수가 1이 아닌 경우, 에러 메시지 출력
             if (result != 1) {
-                throw new RuntimeException("요청하신 Todo는 존재하지 않습니다.");
+                throw new NoSuchElementException("요청하신 Todo는 존재하지 않습니다.");
             }
         }else{
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다. 할 일을 삭제하실 수 없습니다.");
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
     }
 }

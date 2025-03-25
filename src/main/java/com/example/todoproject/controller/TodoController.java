@@ -5,10 +5,12 @@ import com.example.todoproject.dto.TodoResponseDto;
 import com.example.todoproject.dto.TodoWithoutIdResponseDto;
 import com.example.todoproject.dto.UserPwRequestDto;
 import com.example.todoproject.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -18,7 +20,7 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<TodoResponseDto> addTodo(@RequestBody TodoRequestDto dto){
+    public ResponseEntity<TodoResponseDto> addTodo(@Valid @RequestBody TodoRequestDto dto){
         return new ResponseEntity<>(todoService.addTodo(dto),HttpStatus.CREATED);
     }
 
@@ -33,12 +35,12 @@ public class TodoController {
     }
 
     @PatchMapping("/{todoId}")
-    public ResponseEntity<TodoWithoutIdResponseDto> updateTodo(@PathVariable long todoId, @RequestBody TodoRequestDto dto){
+    public ResponseEntity<TodoWithoutIdResponseDto> updateTodo(@PathVariable long todoId, @Valid @RequestBody TodoRequestDto dto){
         return new ResponseEntity<>(todoService.updateTodo(todoId, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{todoId}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable long todoId, @RequestBody UserPwRequestDto dto){
+    public ResponseEntity<Void> deleteTodo(@PathVariable long todoId, @Valid @RequestBody UserPwRequestDto dto){
         todoService.deleteTodo(todoId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
