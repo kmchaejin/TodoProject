@@ -1,7 +1,7 @@
 package com.example.todoproject.repository;
 
 import com.example.todoproject.dto.RequestPostDto;
-import com.example.todoproject.dto.ResponseDto;
+import com.example.todoproject.dto.TodoResponseDto;
 import com.example.todoproject.entity.Todo;
 import com.example.todoproject.entity.User;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,7 +29,7 @@ public class TodoRepositoryImpl implements TodoRepository {
     }
 
     @Override
-    public ResponseDto addTodo(RequestPostDto dto) {
+    public Todo addTodo(RequestPostDto dto) {
         Todo todo = new Todo(dto.getContents());
         User user = new User(dto.getUserName(), dto.getPassword());
 
@@ -54,11 +54,22 @@ public class TodoRepositoryImpl implements TodoRepository {
         Number userId = insertUserInfo.executeAndReturnKey(new MapSqlParameterSource(userParameters));
         Number todoId = insertTodoInfo.executeAndReturnKey(new MapSqlParameterSource(todoParameters));
 
-        // Todo 객체 가져오기
-        List<Todo> todoEntityList = jdbcTemplate.query("select * from todo where id = ?", todoRowMapper(), todoId);
-        Todo todoEntity = todoEntityList.stream().findFirst().orElseThrow(); // orElseThrow() : null이면 예외 발생
+        // 투두 객체 가져오기
+        // 조인mapper로 변경 필요
+        List<Todo> todoList = jdbcTemplate.query("select * from todo where id = ?", todoRowMapper(), todoId);
+        Todo foundTodo = todoList.stream().findFirst().orElseThrow(); // orElseThrow() : null이면 예외 발생
 
-        return new ResponseDto(todoId.longValue(), todo.getContents(), user.getUserName(), todoEntity.getCreatedDate(), todoEntity.getUpdatedDate());
+        return foundTodo;
+    }
+
+    @Override
+    public List<TodoResponseDto> findAllTodos(Timestamp updatedDate, String userName) {
+        // 유저 네임과 투두 객체가 필요함
+        // 방법1. 각각 sql문을 작성해서 따로 가져오기
+        // 방법2. 유저 네임과 투두 객체의 데이터를 모두 가지는 전용 dto 생성 -> userid가 제외된 것만 빼면 똑같아서 굳이 안만들어도 될 듯
+        List<TodoResponseDto> todoResponseDtoList = jdbcTemplate.query("select id, user_name, contents, created_date, updated_date from todo left join user on todo.user_id = user.id where updateDate = ? or user_name = ?", joinRowMapper(), updatedDate, userName);
+
+        return todoResponseDtoList;
     }
 
     private RowMapper<Todo> todoRowMapper() {
@@ -76,18 +87,18 @@ public class TodoRepositoryImpl implements TodoRepository {
         };
     }
 
-    // Timestamp 값 가져오기
-    //List<Timestamp> dates = jdbcTemplate.query("select created_date, updated_date from todo where id = ?", todoRowMapper(), todoId);
-
-//    private RowMapper<List<Timestamp>> todoRowMapper() {
-//        return new RowMapper<List<Timestamp>>() {
-//            @Override
-//            public List<Timestamp> mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                return List.of( // 나중에 아예 Todo 객체로 가져오기
-//                        rs.getTimestamp("created_date"),
-//                        rs.getTimestamp("updated_date")
-//                );
-//            }
-//        };
-//    }
+    private RowMapper<TodoResponseDto> joinRowMapper() {
+        return new RowMapper<TodoResponseDto>() {
+            @Override
+            public TodoResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new TodoResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("user_name"),
+                        rs.getString("contents"),
+                        rs.getTimestamp("created_date"),
+                        rs.getTimestamp("updated_date")
+                );
+            }
+        };
+    }
 }

@@ -17,12 +17,6 @@ public class Todo {
         this.contents = contents;
     }
 
-    // get Timestamp from DB
-//    public Todo(Timestamp createdDate, Timestamp updatedDate) {
-//        this.createdDate = createdDate;
-//        this.updatedDate = updatedDate;
-//    }
-
     public Todo(long todoId, long userId, String contents, Timestamp createdDate, Timestamp updatedDate) {
         this.todoId = todoId;
         this.userId = userId;
