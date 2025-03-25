@@ -1,7 +1,6 @@
 package com.example.todoproject.entity;
 
 import lombok.Getter;
-
 import java.sql.Timestamp;
 
 @Getter
@@ -10,5 +9,5 @@ public class Todo {
     private long userId;
     private String contents;
     private Timestamp createdDate;
-    private String updatedDate;
+    private Timestamp updatedDate;
 }

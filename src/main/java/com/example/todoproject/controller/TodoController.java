@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -19,13 +18,13 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<TodoResponseDto> addTodo(@RequestBody TodoRequestDto dto){ //@Valid 추가
+    public ResponseEntity<TodoResponseDto> addTodo(@RequestBody TodoRequestDto dto){
         return new ResponseEntity<>(todoService.addTodo(dto),HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<TodoResponseDto> findAllTodos(@RequestParam String updatedDate, String userName){
-        return todoService.findAllTodos(updatedDate, userName); // 상태코드 필요한가?
+    public ResponseEntity<List<TodoResponseDto>> findAllTodos(@RequestParam(required = false) String updatedDate, @RequestParam(required = false) String userName){
+        return new ResponseEntity<>(todoService.findAllTodos(updatedDate, userName), HttpStatus.OK);
     }
 
     @GetMapping("/{todoId}")

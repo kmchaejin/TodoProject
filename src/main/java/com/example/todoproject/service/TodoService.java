@@ -4,7 +4,6 @@ import com.example.todoproject.dto.TodoRequestDto;
 import com.example.todoproject.dto.TodoResponseDto;
 import com.example.todoproject.dto.TodoWithoutIdResponseDto;
 import com.example.todoproject.dto.UserPwRequestDto;
-
 import java.util.List;
 
 public interface TodoService {

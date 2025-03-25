@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import java.util.Map;
 public class UserRepositoryImpl implements UserRepository{
     private final JdbcTemplate jdbcTemplate;
 
+    // todo 생성할 때마다 사용자 정보 생성 후 userId 반환
     @Override
     public long addUser(String userName, String password) {
         // 삽입할 테이블, pk 설정
@@ -37,6 +37,7 @@ public class UserRepositoryImpl implements UserRepository{
         return userId.longValue();
     }
 
+    // 사용자 비밀번호 반환
     @Override
     public String findPassword(long userId) {
         List<UserPwResponseDto> userPwList = jdbcTemplate.query("select password from user where id = ?", userRowMapper(), userId);
@@ -45,11 +46,13 @@ public class UserRepositoryImpl implements UserRepository{
         return password.getPassword();
     }
 
+    // 사용자 이름 변경
     @Override
     public int updateUserName(long userId, String userName) {
         return jdbcTemplate.update("update user set user_name = ? where id = ?", userName, userId);
     }
 
+    // password 데이터 매핑
     private RowMapper<UserPwResponseDto> userRowMapper() {
         return new RowMapper<UserPwResponseDto>() {
             @Override
