@@ -1,0 +1,16 @@
+CREATE TABLE user
+(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'User ID',
+    user_name VARCHAR(20) COMMENT 'User Name',
+    password INT NOT NULL COMMENT 'User Password'
+);
+
+CREATE TABLE todo
+(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'Todo ID',
+    user_id BIGINT COMMENT 'User ID',
+    contents VARCHAR(200) COMMENT 'Contents',
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Created Date',
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Updated Date',
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
