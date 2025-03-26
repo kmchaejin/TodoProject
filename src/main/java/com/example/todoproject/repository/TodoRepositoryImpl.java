@@ -2,7 +2,6 @@ package com.example.todoproject.repository;
 
 import com.example.todoproject.dto.TodoResponseDto;
 import com.example.todoproject.dto.TodoWithoutIdResponseDto;
-import com.example.todoproject.dto.UserIdResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -86,10 +85,10 @@ public class TodoRepositoryImpl implements TodoRepository {
     // userId 반환
     @Override
     public long findUserId(long todoId) {
-        List<UserIdResponseDto> userIdList = jdbcTemplate.query("select user_id from todo where id = ?", todoRowMapper(), todoId);
-        UserIdResponseDto userId = userIdList.stream().findFirst().orElseThrow();
+        List<Long> userIdList = jdbcTemplate.query("select user_id from todo where id = ?", todoRowMapper(), todoId);
+        long userId = userIdList.stream().findFirst().orElseThrow();
 
-        return userId.getUserId();
+        return userId;
     }
 
     // todo 내용 수정
@@ -136,13 +135,11 @@ public class TodoRepositoryImpl implements TodoRepository {
     }
 
     // userId 매핑
-    private RowMapper<UserIdResponseDto> todoRowMapper() {
-        return new RowMapper<UserIdResponseDto>() {
+    private RowMapper<Long> todoRowMapper() {
+        return new RowMapper<Long>() {
             @Override
-            public UserIdResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new UserIdResponseDto(
-                        rs.getLong("user_id")
-                );
+            public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getLong("user_id");
             }
         };
     }

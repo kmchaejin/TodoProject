@@ -1,13 +1,11 @@
 package com.example.todoproject.repository;
 
-import com.example.todoproject.dto.UserPwResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -41,10 +39,10 @@ public class UserRepositoryImpl implements UserRepository{
     // 사용자 비밀번호 반환
     @Override
     public String findPassword(long userId) {
-        List<UserPwResponseDto> userPwList = jdbcTemplate.query("select password from user where id = ?", userRowMapper(), userId);
-        UserPwResponseDto password = userPwList.stream().findFirst().orElseThrow();
+        List<String> userPwList = jdbcTemplate.query("select password from user where id = ?", userRowMapper(), userId);
+        String password = userPwList.stream().findFirst().orElseThrow();
 
-        return password.getPassword();
+        return password;
     }
 
     // 사용자 이름 변경
@@ -54,13 +52,11 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     // password 데이터 매핑
-    private RowMapper<UserPwResponseDto> userRowMapper() {
-        return new RowMapper<UserPwResponseDto>() {
+    private RowMapper<String> userRowMapper() {
+        return new RowMapper<String>() {
             @Override
-            public UserPwResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new UserPwResponseDto(
-                        rs.getString("password")
-                );
+            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getString("password");
             }
         };
     }
