@@ -33,6 +33,8 @@ option 4. 모든 할 일 전체 조회 <br>
 
 ## API 명세서
 https://documenter.getpostman.com/view/43160193/2sAYkKJxoc
+<br><br>
+![image](https://github.com/user-attachments/assets/cb329b66-2ffe-4c7f-baa4-872b8131bb47)
 
 <br>
 
