@@ -2,7 +2,7 @@ CREATE TABLE user
 (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'User ID',
     user_name VARCHAR(20) COMMENT 'User Name',
-    password INT NOT NULL COMMENT 'User Password'
+    password VARCHAR(10) NOT NULL COMMENT 'User Password'
 );
 
 CREATE TABLE todo
